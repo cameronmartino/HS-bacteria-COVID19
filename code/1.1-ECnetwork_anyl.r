@@ -1,6 +1,5 @@
 library(openxlsx)
 library(dplyr)
-#library(tidyverse)
 library(igraph)
 library(reshape2)
 library(gplots)
@@ -10,8 +9,6 @@ library(ggExtra)
 library(dplyr)
 library(forcats)
 
-setwd('G:/My Drive/00_professional/projects/Coronavirus/Microbiome ~ Viral Load Study (Cameron)/')
-
 reload=F
 tpm_norm = F
 makeplt=T
@@ -20,10 +17,10 @@ taxas = c('genus','sp')[2] ### select taxa
 
 if(reload){
   # load data
-  if(!file.exists('microbiome-mapping/feature-metadata-and-ranks.csv')){
+  if(!file.exists('data/microbiome-mapping/feature-metadata-and-ranks.csv')){
     stop('Microbiome samples contain protected patient data. Please request these files through the FINRISK secure data portal')
   }
-  dat = read.csv('microbiome-mapping/feature-metadata-and-ranks.csv')
+  dat = read.csv('data/microbiome-mapping/feature-metadata-and-ranks.csv')
   dat$Cross.reference..CAZy. = gsub(';$','',dat$Cross.reference..CAZy.)
   dat = separate_rows(dat,Cross.reference..CAZy.,sep=';')
   
@@ -33,11 +30,11 @@ if(reload){
   # integrate mapping with data
   tmp_dat = merge(ec,dat,by.x='CAZy.ID',by.y='Cross.reference..CAZy.',all.y=T)
   
-  write.csv(tmp_dat,file='microbiome-mapping/feature-metadata-and-ranks.complete_EC_CAZyID.csv',row.names = F)
+  write.csv(tmp_dat,file='data/microbiome-mapping/feature-metadata-and-ranks.complete_EC_CAZyID.csv',row.names = F)
   
   
   # load ec network
-  ecnet = read.xlsx('code/glycogene-clusters/CAZy/cazyEC.xlsx',sheet = 3)
+  ecnet = read.xlsx('data/glycogene-clusters/CAZy/cazyEC.xlsx',sheet = 3)
   ecnet_tmp = unique(melt(ecnet,id.vars = c('Target'))[,c(1,3)])
   head(ecnet)
   
@@ -102,7 +99,7 @@ for(taxa in taxas){
       scale_x_log10()+scale_y_log10()+stat_smooth()+xlab('log(mean(log counts)) by EC')+ylab('log(var(log counts)) by EC')+theme_bw(base_size = sz)
     
     g = plot_grid(g1,g2,g3,g4,labels=LETTERS[1:4])
-    ggsave(g,filename='pathway-activation/QC/01-variance_stabilization.pdf',height=10,width=8)
+    ggsave(g,filename='data/pathway-activation/QC/01-variance_stabilization.pdf',height=10,width=8)
   }  
   
   ### sum, mean and mean-threshold on log counts
@@ -118,7 +115,7 @@ for(taxa in taxas){
       scale_y_log10()+scale_x_log10()+theme_bw(base_size=sz)
     g=ggExtra::ggMarginal(g, type = "histogram")
     g
-    ggsave(g,filename='pathway-activation/QC/02-abundance_agg_distributions.pdf',height=6,width=6)
+    ggsave(g,filename='data/pathway-activation/QC/02-abundance_agg_distributions.pdf',height=6,width=6)
     
     g1=ggplot(reactions,aes(x=Target,y=EC_abundance_sum))+geom_boxplot()+
       ylab('sum(log counts) by Taxa, Pathway & EC')+theme_bw(base_size = sz)+theme(axis.text.x = element_text(angle = 45,hjust = 1))
@@ -126,7 +123,7 @@ for(taxa in taxas){
       ylab('mean(log counts) by Taxa, Pathway & EC')+theme_bw(base_size = sz)+theme(axis.text.x = element_text(angle = 45,hjust = 1))
     g = plot_grid(g1,g2,labels=LETTERS[1:2])
     g
-    ggsave(g,filename='pathway-activation/QC/03-abundance_agg_distributions.by_pathway.pdf',height=6,width=6)
+    ggsave(g,filename='data/pathway-activation/QC/03-abundance_agg_distributions.by_pathway.pdf',height=6,width=6)
   }  
   
   reactions = reactions %>% group_by(Target,taxa) %>% 
@@ -166,7 +163,7 @@ for(taxa in taxas){
     
     g = plot_grid(g2a,g2b,labels=LETTERS[1:2])
     g
-    ggsave(g,filename='pathway-activation/QC/04-gene_activation_distributions.by_pathway.pdf',height=4,width=6)
+    ggsave(g,filename='data/pathway-activation/QC/04-gene_activation_distributions.by_pathway.pdf',height=4,width=6)
   }
   
   # threshold: 25th/75th percentile bounded mean within a CAZy ID; abundance[percentile(mean s.t. 25%<=mean<=75%)] (not used)
@@ -192,7 +189,7 @@ for(taxa in taxas){
     
     g=plot_grid(g3,g4)
     g
-    ggsave(g,filename = paste0('pathway-activation/pathway_completeness-capacity.',taxa,'.pdf'),height = 20,width=20)
+    ggsave(g,filename = paste0('data/pathway-activation/pathway_completeness-capacity.',taxa,'.pdf'),height = 20,width=20)
   
     
     rank = with(reactions, data.frame(genus=genus,sp=sp,value=pathway_capacity))
@@ -209,7 +206,7 @@ for(taxa in taxas){
       labs(color = 'Species')+
       theme_bw(base_size = 15)#+theme(legend.position = "top")#+scale_color_viridis_d()
     g5
-    ggsave(g5,filename = paste0('pathway-activation/pathway_completeness-capacity.',taxa,'.named.pdf'),height=10,width=15)
+    ggsave(g5,filename = paste0('data/pathway-activation/pathway_completeness-capacity.',taxa,'.named.pdf'),height=10,width=15)
     
     rank = with(reactions, data.frame(genus=genus,sp=sp,pathway_capacity=pathway_capacity))
     rank$rank = order(rank$pathway_capacity)
@@ -220,12 +217,12 @@ for(taxa in taxas){
       #geom_bar(stat='identity',position='dodge')+
       scale_fill_viridis_d()+theme_bw(base_size=15)
     g6
-    ggsave(g6,filename = paste0('pathway-activation/pathway_completeness-capacity.',taxa,'.barplots.pdf'))
+    ggsave(g6,filename = paste0('data/pathway-activation/pathway_completeness-capacity.',taxa,'.barplots.pdf'))
   }
   
   reactions = unique(reactions)
   
-  write.csv(reactions,file=paste0('pathway-activation/pathway_completeness-capacity.',taxa,'.csv'))
+  write.csv(reactions,file=paste0('data/pathway-activation/pathway_completeness-capacity.',taxa,'.csv'))
   
   #### additional data exploration
   d1 = dcast(data=unique(reactions[,c('Target','value','taxa','EC_abundance_sum')]),formula= Target+value~taxa,value.var = 'EC_abundance_sum',fill=0)
@@ -235,19 +232,19 @@ for(taxa in taxas){
   d2b = dcast(data=unique(reactions[,c('Target','taxa','pathway_capacity')]),formula= Target~taxa,value.var = 'pathway_capacity',fill=0,fun.aggregate = prod)
   
   if(makeplt){
-    pdf(paste0('pathway-activation/pathway_completeness.',taxa,'.heatmaps.pdf'),height=20)
+    pdf(paste0('data/pathway-activation/pathway_completeness.',taxa,'.heatmaps.pdf'),height=20)
     heatmap.2(log(t(data.matrix(d1[,-c(1:3)]))+1),Colv = F,trace='none',ColSideColors = rainbow(7)[factor(d1$Target)],col=hcl.colors,
               labCol = paste(d1$value,d1$Target),cexCol=1,margins=c(12,7))
     heatmap.2(t(data.matrix(d2[,-1])),trace='none',labCol = d2$Target,margins = c(10,7),cexCol = 1,col=rev(c('black','lightgrey')))
     dev.off()
     
-    pdf(paste0('pathway-activation/pathway_capacity.',taxa,'.heatmaps.pdf'),height=20)
+    pdf(paste0('data/pathway-activation/pathway_capacity.',taxa,'.heatmaps.pdf'),height=20)
     heatmap.2(t(data.matrix(d1b[,-c(1:3)])),Colv = F,trace='none',ColSideColors = rainbow(7)[factor(d1$Target)],col=hcl.colors,
               labCol = paste(d1$value,d1$Target),cexCol=1,margins=c(12,7))
     heatmap.2(t(data.matrix(d2b[,-1])),trace='none',labCol = d2$Target,margins = c(10,7),cexCol = 1,col=hcl.colors)
     dev.off()
     
-    pdf(paste0('pathway-activation/pathway_capacity.',taxa,'.heatmaps.small.pdf'),height=20)
+    pdf(paste0('data/pathway-activation/pathway_capacity.',taxa,'.heatmaps.small.pdf'),height=20)
     rank = with(reactions, data.frame(genus=genus,sp=sp,value=pathway_capacity))
     top = unique(rank$sp[order(rank$value,decreasing = TRUE)[1:1000]])
     
