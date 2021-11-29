@@ -1,0 +1,37 @@
+,strain,time,conc (mg/ml),condition
+0,Bacteroides ovatus,0 Hours,0.43155157836991376,Heparin
+1,Bacteroides ovatus,0 Hours,0.5066790291749254,Heparin
+2,Bacteroides ovatus,0 Hours,0.7019024151990366,Heparin
+3,Bacteroides ovatus,0 Hours,0.701593883573554,"Heparin
++Glucose"
+4,Bacteroides ovatus,0 Hours,0.633794058873754,"Heparin
++Glucose"
+5,Bacteroides ovatus,0 Hours,0.5836576697328326,"Heparin
++Glucose"
+6,Bacteroides thetaiotaomicron,0 Hours,0.7157092054393825,Heparin
+7,Bacteroides thetaiotaomicron,0 Hours,0.5071032601599639,Heparin
+8,Bacteroides thetaiotaomicron,0 Hours,0.6665755440812796,Heparin
+9,Bacteroides thetaiotaomicron,0 Hours,0.6940734252024159,"Heparin
++Glucose"
+10,Bacteroides thetaiotaomicron,0 Hours,0.6651100188602372,"Heparin
++Glucose"
+11,Bacteroides thetaiotaomicron,0 Hours,0.7446340453283758,"Heparin
++Glucose"
+24,Bacteroides ovatus,84 Hours,0.2731977215909725,Heparin
+25,Bacteroides ovatus,84 Hours,0.1814866959162715,Heparin
+26,Bacteroides ovatus,84 Hours,0.2284220694428111,Heparin
+27,Bacteroides ovatus,84 Hours,0.14916800814696982,"Heparin
++Glucose"
+28,Bacteroides ovatus,84 Hours,0.13582401534484764,"Heparin
++Glucose"
+29,Bacteroides ovatus,84 Hours,0.1502864352893442,"Heparin
++Glucose"
+30,Bacteroides thetaiotaomicron,84 Hours,0.2941778721237889,Heparin
+31,Bacteroides thetaiotaomicron,84 Hours,0.2396063408665551,Heparin
+32,Bacteroides thetaiotaomicron,84 Hours,0.20169551738538144,Heparin
+33,Bacteroides thetaiotaomicron,84 Hours,0.5037865451860261,"Heparin
++Glucose"
+34,Bacteroides thetaiotaomicron,84 Hours,0.4594736904760885,"Heparin
++Glucose"
+35,Bacteroides thetaiotaomicron,84 Hours,0.1989958656624087,"Heparin
++Glucose"
